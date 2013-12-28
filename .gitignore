@@ -1,0 +1,5 @@
+backups/*
+*~
+places
+eshell/history
+elpa/archives/*
