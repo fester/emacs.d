@@ -5,7 +5,21 @@
         ("gnu"         . "http://elpa.gnu.org/packages/")
         ("marmalade"   . "http://marmalade-repo.org/packages/")
         ("melpa" . "http://melpa.milkbox.net/packages/")))
+
 (package-initialize)
+
+(setq additional-packages 
+    '(magit moe-theme yasnippet yaml-mode))
+
+; fetch the list of packages available 
+(when (not package-archive-contents)
+  (package-refresh-contents))
+
+; install the missing packages
+(dolist (package additional-packages)
+  (when (not (package-installed-p package))
+    (package-install package)))
+
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
@@ -45,3 +59,5 @@
       save-place-file (concat user-emacs-directory "places")
       backup-directory-alist `(("." . ,(concat user-emacs-directory
                                                "backups"))))
+
+(load-theme 'moe-dark t)
