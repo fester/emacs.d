@@ -7,6 +7,19 @@
         ("melpa" . "http://melpa.milkbox.net/packages/")))
 (package-initialize)
 
+(setq additional-packages 
+    '(magit moe-theme yasnippet yaml-mode))
+
+; fetch the list of packages available 
+(when (not package-archive-contents)
+  (package-refresh-contents))
+
+; install the missing packages
+(dolist (package additional-packages)
+  (when (not (package-installed-p package))
+    (package-install package)))
+
+
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 (load-theme 'moe-dark t)
