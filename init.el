@@ -9,6 +9,7 @@
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
+(load-theme 'moe-dark t)
 
 (ido-mode t)
 (setq ido-enable-flex-matching t)
@@ -33,7 +34,7 @@
 (global-set-key (kbd "C-M-s") 'isearch-forward)
 (global-set-key (kbd "C-M-r") 'isearch-backward)
 
-
+(global-set-key (kbd "C-c m") 'magit-status)
 
 (show-paren-mode 1)
 (setq-default indent-tabs-mode nil)
@@ -45,3 +46,9 @@
       save-place-file (concat user-emacs-directory "places")
       backup-directory-alist `(("." . ,(concat user-emacs-directory
                                                "backups"))))
+
+(setq auto-mode-alist
+      (append 
+       '(("Rakefile" . ruby-mode)
+         ("Gemfile" . ruby-mode)
+         ("config.ru" . ruby-mode))))
