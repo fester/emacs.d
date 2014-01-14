@@ -61,7 +61,9 @@
                                                "backups"))))
 
 (setq auto-mode-alist
-      (append 
-       '(("Rakefile" . ruby-mode)
+      (append
+       '(("Capfile" . ruby-mode)
+         ("Rakefile" . ruby-mode)
          ("Gemfile" . ruby-mode)
-         ("config.ru" . ruby-mode))))
+         ("config.ru'" . ruby-mode))
+       auto-mode-alist))
