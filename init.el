@@ -4,11 +4,16 @@
       '(("original"    . "http://tromey.com/elpa/")
         ("gnu"         . "http://elpa.gnu.org/packages/")
         ("marmalade"   . "http://marmalade-repo.org/packages/")
-        ("melpa" . "http://melpa.milkbox.net/packages/")))
+        ("melpa" . "http://melpa.milkbox.net/packages/")
+        ("elpy" . "https://jorgenschaefer.github.io/packages/")))
 (package-initialize)
 
 (setq additional-packages 
-    '(magit moe-theme yasnippet yaml-mode))
+      '(magit moe-theme yasnippet yaml-mode yas-jit
+              scala-mode2 ensime
+
+              pyenv-mode elpy
+              markdown-mode))
 
 ; fetch the list of packages available 
 (when (not package-archive-contents)
@@ -39,6 +44,9 @@
 (require 'saveplace)
 (setq-default save-place t)
 
+(package-initialize)
+(elpy-enable)
+
 (global-set-key (kbd "M-/") 'hippie-expand)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 
@@ -48,6 +56,8 @@
 (global-set-key (kbd "C-M-r") 'isearch-backward)
 
 (global-set-key (kbd "C-c m") 'magit-status)
+
+(highlight-indentation-mode -1)
 
 (show-paren-mode 1)
 (setq-default indent-tabs-mode nil)
@@ -67,3 +77,13 @@
          ("Gemfile" . ruby-mode)
          ("config.ru'" . ruby-mode))
        auto-mode-alist))
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(elpy-modules
+   (quote
+    (elpy-module-company elpy-module-eldoc elpy-module-flymake elpy-module-pyvenv elpy-module-yasnippet elpy-module-sane-defaults)))
+ '(ns-command-modifier (quote meta)))
