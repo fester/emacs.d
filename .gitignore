@@ -3,3 +3,5 @@ backups/*
 places
 eshell/history
 elpa/*
+ido.last
+
