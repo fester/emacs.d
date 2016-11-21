@@ -5,17 +5,20 @@
 ;; no startup msg  
 (setq inhibit-startup-message t)        ; Disable startup message
 
-
 (require 'package)
 
 (setq package-archives
-      '(("original"    . "http://tromey.com/elpa/")
-        ("gnu"         . "http://elpa.gnu.org/packages/")
-        ;; ("marmalade"   . "http://marmalade-repo.org/packages/")
-        ("melpa" . "http://stable.melpa.org/packages/")
-        ("elpy" . "https://jorgenschaefer.github.io/packages/")))
-
+      '(("gnu"         . "http://elpa.gnu.org/packages/")
+        ("marmalade"   . "http://marmalade-repo.org/packages/")
+        ("melpa"       . "http://melpa.org/packages/")))
 (package-initialize)
+
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+(eval-when-compile
+  (require 'use-package))
 
 
 (setq additional-packages 
@@ -36,11 +39,6 @@
 (when (not package-archive-contents)
   (package-refresh-contents))
 
-; install the missing packages
-(dolist (package additional-packages)
-  (when (not (package-installed-p package))
-    (package-install package)))
-
 
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
@@ -51,17 +49,7 @@
 (ido-mode t)
 (setq ido-enable-flex-matching t)
 
-(menu-bar-mode -1)
-(when (fboundp 'tool-bar-mode)
-  (tool-bar-mode -1))
-(when (fboundp 'scroll-bar-mode)
-  (scroll-bar-mode -1))
 
-(require 'uniquify)
-(setq uniquify-buffer-name-style 'forward)
-
-(require 'saveplace)
-(setq-default save-place t)
 
 (package-initialize)
 (elpy-enable)
