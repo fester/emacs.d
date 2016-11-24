@@ -1,16 +1,21 @@
-(defalias 'yes-or-no-p 'y-or-n-p)
 (setq mac-option-modifier 'super)
 (setq mac-command-modifier 'meta)
 
-;; no startup msg  
-(setq inhibit-startup-message t)        ; Disable startup message
+(defalias 'yes-or-no-p 'y-or-n-p)
+(setq inhibit-startup-message t)
 
+(setq ansi-color-for-comint-mode t)
+
+(show-paren-mode 1)
+
+
+;; Packages setup
 (require 'package)
 
 (setq package-archives
-      '(("gnu"         . "http://elpa.gnu.org/packages/")
-        ("marmalade"   . "http://marmalade-repo.org/packages/")
-        ("melpa"       . "http://melpa.org/packages/")))
+      '(("melpa"       . "http://melpa.org/packages/")
+        ("gnu"         . "http://elpa.gnu.org/packages/")
+        ("marmalade"   . "http://marmalade-repo.org/packages/")))
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
@@ -21,67 +26,66 @@
   (require 'use-package))
 
 
-(setq additional-packages 
-      '(
-        better-defaults exec-path-from-shell
-
-        magit
-	moe-theme yasnippet yaml-mode yas-jit
-
-	pyenv-mode elpy
-	markdown-mode
-
-	clojure-mode cider projectile
-	paredit rainbow-delimiters
-	))
-
-; fetch the list of packages available 
-(when (not package-archive-contents)
-  (package-refresh-contents))
+(use-package moe-theme
+  :ensure t
+  :demand t
+  :config (load-theme 'moe-dark t))
 
 
-(when (memq window-system '(mac ns))
-  (exec-path-from-shell-initialize))
+(use-package better-defaults
+  :ensure t
+  :demand t)
+
+(use-package exec-path-from-shell
+  :ensure t
+  :demand t
+  :if (memq window-system '(mac ns))
+  :config (exec-path-from-shell-initialize))
 
 
-(load-theme 'moe-dark t)
+(use-package magit
+  :ensure t
+  :demand t)
 
-(ido-mode t)
-(setq ido-enable-flex-matching t)
+(use-package yasnippet
+  :ensure t
+  :config
+  (yas-reload-all)
+  (add-hook 'prog-mode-hook #'yas-minor-mode))
 
 
+(use-package yas-jit
+  :ensure t)
 
-(package-initialize)
-(elpy-enable)
 
-(global-set-key (kbd "C-c m") 'magit-status)
+(use-package yaml-mode
+  :ensure t)
 
-(highlight-indentation-mode -1)
+(use-package pyenv-mode
+  :ensure t)
 
-(show-paren-mode 1)
+(use-package elpy
+  :ensure t
+  :init
+  (setq elpy-modules (quote (elpy-module-sane-defaults elpy-module-company
+                             elpy-module-eldoc elpy-module-flymake
+                             elpy-module-pyvenv elpy-module-yasnippet)))
+  (setq elpy-rpc-backend "jedi")
+  
+  :config
+  (elpy-enable))
 
-(setq auto-mode-alist
-      (append
-       '(("Capfile" . ruby-mode)
-         ("Rakefile" . ruby-mode)
-         ("Gemfile" . ruby-mode)
-         ("config.ru'" . ruby-mode))
-       auto-mode-alist))
+(use-package clojure-mode
+  :ensure t)
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(elpy-modules
-   (quote
-    (elpy-module-company elpy-module-eldoc elpy-module-flymake elpy-module-yasnippet elpy-module-sane-defaults)))
- '(elpy-rpc-backend "jedi")
- '(exec-path-from-shell-check-startup-files nil)
- '(safe-local-variable-values
-   (quote
-    ((cider-cljs-lein-repl . "(do (dev) (go) (cljs-repl))")
-     (cider-refresh-after-fn . "reloaded.repl/resume")
-     (cider-refresh-before-fn . "reloaded.repl/suspend")))))
+(use-package paredit
+  :ensure t)
 
-(setq ansi-color-for-comint-mode t)
+(use-package rainbow-delimiters
+  :ensure t)
+
+(use-package cider
+  :ensure t)
+
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file)
