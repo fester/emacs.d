@@ -30,8 +30,10 @@
  backup-directory-alist `(("." . ,(concat user-emacs-directory
                                           "backups"))))
 
-(defalias 'yes-or-no-p 'y-or-n-p)
+(setq show-paren-delay 0)
+(show-paren-mode t)
 
+(defalias 'yes-or-no-p 'y-or-n-p)
 
 (require 'package)
 
@@ -41,10 +43,27 @@
 
 (package-initialize)
 
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
 
-;; (require 'uniquify)
-;; (setq uniquify-buffer-name-style 'forward)
+(setq use-package-always-ensure t
+      use-package-always-defer t)
 
-;; (require 'saveplace)
-;; (setq-default save-place t)
+(use-package ample-theme
+  :demand)
 
+(use-package uniquify
+  :init
+  (setq uniquify-buffer-name-style 'forward)
+
+  :ensure nil
+  :demand)
+
+(use-package saveplace
+  :init (save-place-mode)
+  :ensure nil
+  :demand)
+
+(use-package magit
+  :bind (("C-x g" . magit-status)))
