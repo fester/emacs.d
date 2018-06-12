@@ -10,7 +10,9 @@
 (when (fboundp 'horizontal-scroll-bar-mode)
   (horizontal-scroll-bar-mode -1))
 
-(setq inhibit-startup-message t)
+(prefer-coding-system 'utf-8)
+
+
 
 (setq ring-bell-function 'ignore)
 
@@ -19,6 +21,17 @@
   (setq mac-command-modifier 'meta))
 
 (setq
+ inhibit-startup-message t
+
+
+ load-prefer-newer t
+ history-length 256
+ maximum-scroll-margin 0.1
+ scroll-margin 25
+ scroll-preserve-screen-position t
+
+ create-lockfiles nil 
+
  x-select-enable-clipboard t
  x-select-enable-primary t
  save-interprogram-paste-before-kill t
@@ -77,3 +90,10 @@
   :demand
   :ensure nil)
 
+
+(use-package exec-path-from-shell
+  :custom
+  (exec-path-from-shell-check-startup-files nil)
+  :config
+  (push "HISTFILE" exec-path-from-shell-variables)
+  (exec-path-from-shell-initialize))
