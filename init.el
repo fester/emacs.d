@@ -30,9 +30,6 @@
  backup-directory-alist `(("." . ,(concat user-emacs-directory
                                           "backups"))))
 
-(setq show-paren-delay 0)
-(show-paren-mode t)
-
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 (require 'package)
@@ -67,3 +64,16 @@
 
 (use-package magit
   :bind (("C-x g" . magit-status)))
+
+(use-package paren
+  :custom
+  (show-paren-when-point-inside-paren t)
+  (show-paren-when-point-in-periphery t)
+
+  :init
+  (setq show-paren-delay 0)
+  (show-paren-mode t)
+
+  :demand
+  :ensure nil)
+
