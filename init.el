@@ -55,7 +55,8 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
-(require 'use-package)
+(eval-when-compile
+  (require 'use-package))
 
 (setq use-package-always-ensure t
       use-package-always-defer t)
@@ -101,10 +102,14 @@
   (exec-path-from-shell-initialize))
 
 (use-package yasnippet
+  :defer 5
+
   :init
   (add-hook 'prog-mode-hook #'yas-minor-mode)
+
   :config
   (yas-reload-all))
+
 
 (use-package yasnippet-snippets)
 
@@ -113,4 +118,38 @@
   :init
   (global-flycheck-mode)
   :config
+
   (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
+
+
+(use-package ivy
+  :demand
+  :config
+  (ivy-mode 1)
+  (setq ivy-use-virtual-buffers t
+        ivy-count-format "%d/%d "
+	enable-recursive-minibuffers t)
+  :bind ("C-c C-r" . 'ivy-resume))
+
+
+(use-package swiper
+  :bind
+  ("C-s" . 'swiper))
+
+
+(use-package counsel
+  :config
+  :bind (("M-x" . 'counsel-M-x)
+	 ("C-x C-f" . 'counsel-find-file)
+	 ("<f1> f" . 'counsel-describe-function)
+	 ("<f1> v" . 'counsel-describe-variable)
+	 ("<f1> l" . 'counsel-find-library)
+	 ("<f2> i" . 'counsel-info-lookup-symbol)
+	 ("<f2> u" . 'counsel-unicode-char)
+	 ("C-c g" . 'counsel-git)
+	 ("C-c j" . 'counsel-git-grep)
+	 ("C-c a" . 'counsel-ag)
+	 ("C-x l" . 'counsel-locate)
+	 :map minibuffer-local-map
+	 ("C-r" . 'counsel-minibuffer-history)))
+
