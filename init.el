@@ -1,3 +1,4 @@
+
 (when (fboundp 'menu-bar-mode)
   (menu-bar-mode -1))
 
@@ -23,7 +24,6 @@
 (setq
  inhibit-startup-message t
 
-
  load-prefer-newer t
  history-length 256
  maximum-scroll-margin 0.1
@@ -32,14 +32,12 @@
 
  create-lockfiles nil 
 
- x-select-enable-clipboard t
- x-select-enable-primary t
+ select-enable-clipboard t
+ select-enable-primary t
  save-interprogram-paste-before-kill t
  mouse-yank-at-point t
 
  custom-file (expand-file-name "custom.el" user-emacs-directory)
- save-place-file (concat user-emacs-directory "places")
-
  backup-directory-alist `(("." . ,(concat user-emacs-directory
                                           "backups"))))
 
@@ -57,6 +55,8 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
+(require 'use-package)
+
 (setq use-package-always-ensure t
       use-package-always-defer t)
 
@@ -72,6 +72,8 @@
 
 (use-package saveplace
   :init (save-place-mode)
+  :config
+  (setq save-place-file (concat user-emacs-directory "places"))
   :ensure nil
   :demand)
 
@@ -97,3 +99,18 @@
   :config
   (push "HISTFILE" exec-path-from-shell-variables)
   (exec-path-from-shell-initialize))
+
+(use-package yasnippet
+  :init
+  (add-hook 'prog-mode-hook #'yas-minor-mode)
+  :config
+  (yas-reload-all))
+
+(use-package yasnippet-snippets)
+
+
+(use-package flycheck
+  :init
+  (global-flycheck-mode)
+  :config
+  (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
