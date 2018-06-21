@@ -153,3 +153,17 @@
 	 :map minibuffer-local-map
 	 ("C-r" . 'counsel-minibuffer-history)))
 
+(use-package modern-cpp-font-lock
+  :ensure nil
+  :config (modern-c++-font-lock-global-mode t))
+
+(use-package projectile
+  :diminish projectile-mode
+  :init
+  (projectile-mode))
+
+
+(use-package which-key
+      :diminish which-key-mode
+      :config
+      (which-key-mode))
