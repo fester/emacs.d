@@ -27,7 +27,7 @@
  load-prefer-newer t
  history-length 256
  maximum-scroll-margin 0.1
- scroll-margin 25
+ scroll-margin 5
  scroll-preserve-screen-position t
 
  create-lockfiles nil 
@@ -95,10 +95,13 @@
 
 
 (use-package exec-path-from-shell
+  :if (memq window-system '(mac ns x))
+
   :custom
   (exec-path-from-shell-check-startup-files nil)
-  :config
-  (push "HISTFILE" exec-path-from-shell-variables)
+  (exec-path-from-shell-variables (quote ("PATH" "MANPATH" "HISTFILE")))
+
+  :init
   (exec-path-from-shell-initialize))
 
 (use-package yasnippet
@@ -153,10 +156,6 @@
 	 :map minibuffer-local-map
 	 ("C-r" . 'counsel-minibuffer-history)))
 
-(use-package modern-cpp-font-lock
-  :ensure nil
-  :config (modern-c++-font-lock-global-mode t))
-
 (use-package projectile
   :diminish projectile-mode
   :init
@@ -167,3 +166,50 @@
       :diminish which-key-mode
       :config
       (which-key-mode))
+
+;; --------------------
+;; C++
+
+(use-package modern-cpp-font-lock
+  :config (modern-c++-font-lock-global-mode t))
+
+(use-package company
+  :init
+  (global-company-mode))
+
+(use-package company-rtags)
+
+(use-package flycheck-rtags
+  :defer t)
+
+(defun setup-flycheck-rtags ()
+  (interactive)
+  (flycheck-select-checker 'rtags)
+  ;; RTags creates more accurate overlays.
+  (setq-local flycheck-highlighting-mode nil)
+  (setq-local flycheck-check-syntax-automatically nil))
+
+(use-package rtags
+  :init
+  (rtags-enable-standard-keybindings)
+  (rtags-diagnostics)
+  (setq rtags-completions-enabled t)
+  (push 'company-rtags company-backends)
+  (require 'flycheck-rtags)
+
+  :bind (:map c-mode-base-map
+         ("M-." . rtags-find-symbol-at-point)
+         ("M-," . rtags-find-references-at-point)
+	 ("<C-tab>" . company-complete)
+	 ("M-*" . rtags-location-stack-back))
+
+  :hook (c-mode-common-hook . setup-flycheck-rtags))
+
+
+(use-package cmake-ide
+  :config
+  (require 'rtags)
+  (cmake-ide-setup)
+  (rtags-enable-standard-keybindings)
+  :bind (:map c-mode-base-map  
+	 ("C-c C-c" . cmake-ide-compile)))
