@@ -1,3 +1,6 @@
+(global-unset-key (kbd "C-x C-c"))
+(global-set-key (kbd "C-x C-/") 'save-buffers-kill-terminal)
+
 
 (when (fboundp 'menu-bar-mode)
   (menu-bar-mode -1))
@@ -213,3 +216,15 @@
   (rtags-enable-standard-keybindings)
   :bind (:map c-mode-base-map  
 	 ("C-c C-c" . cmake-ide-compile)))
+
+;; ---- Python
+
+(use-package elpy
+  :hook (python-mode . elpy-enable))
+
+(use-package pipenv
+  :hook (python-mode . pipenv-mode)
+  :init
+  (setq
+   pipenv-projectile-after-switch-function
+   #'pipenv-projectile-after-switch-extended))
