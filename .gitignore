@@ -3,3 +3,4 @@ backups/*
 places
 eshell/history
 elpa/*
+projectiles/

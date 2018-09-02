@@ -164,8 +164,17 @@
 	 :map minibuffer-local-map
 	 ("C-r" . 'counsel-minibuffer-history)))
 
+
+(defun projectile-artifact (artifact-name)
+  (expand-file-name artifact-name
+					(concat user-emacs-directory
+							(file-name-as-directory "projectiles"))))
+  
 (use-package projectile
   :diminish projectile-mode
+  :custom
+  (projectile-known-projects-file (projectile-artifact "bookmarks"))
+  (projectile-cache-file (projectile-artifact "cache"))
   :init
   (projectile-mode))
 
