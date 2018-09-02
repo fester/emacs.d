@@ -1,3 +1,4 @@
+;; Product of fat fingers syndrome and shitty mbp butterfly keyboard.
 (global-unset-key (kbd "C-x C-c"))
 (global-set-key (kbd "C-x C-/") 'save-buffers-kill-terminal)
 
