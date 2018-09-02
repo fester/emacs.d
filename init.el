@@ -68,6 +68,9 @@
 (use-package ample-theme
   :demand)
 
+(use-package diminish)
+  
+
 (use-package uniquify
   :init
   (setq uniquify-buffer-name-style 'forward)
@@ -130,6 +133,7 @@
 
 
 (use-package ivy
+  :diminish ivy-mode
   :demand
   :config
   (ivy-mode 1)
@@ -178,6 +182,7 @@
   :config (modern-c++-font-lock-global-mode t))
 
 (use-package company
+  :diminish company-mode
   :init
   (global-company-mode))
 
