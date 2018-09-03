@@ -25,6 +25,9 @@
   (setq mac-option-modifier 'super)
   (setq mac-command-modifier 'meta))
 
+(setq-default c-basic-offset 4
+			  tab-width 4)
+
 (setq
  inhibit-startup-message t
 
@@ -223,14 +226,30 @@
 
   :hook (c-mode-common-hook . setup-flycheck-rtags))
 
+(defun set-cmake-ide-build-dirs ()
+  (with-eval-after-load 'projectile
+	(setq cmake-ide-project-dir (projectile-project-root))
+	(setq cmake-ide-build-dir (concat (projectile-project-root) "build"))))
+  
 
 (use-package cmake-ide
+  :after (projectile rtags)
+  :init
+  (setq projectile-after-switch-project-hook 'set-cmake-ide-build-dirs)
+  
   :config
   (require 'rtags)
   (cmake-ide-setup)
-  (rtags-enable-standard-keybindings)
+
   :bind (:map c-mode-base-map  
-	 ("C-c C-c" . cmake-ide-compile)))
+			  ("C-c C-c" . cmake-ide-compile)))
+
+(use-package clang-format
+  :after projectile
+  :bind (:map c-mode-map
+	      ("<C-M-tab>" . clang-format-buffer)
+         :map c++-mode-map
+	      ("<C-M-tab>" . clang-format-buffer)))
 
 ;; ---- Python
 
