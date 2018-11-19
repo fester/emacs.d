@@ -103,6 +103,8 @@
   :demand
   :ensure nil)
 
+(use-package ace-window
+  :bind (("M-o" . ace-window)))
 
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns x))
