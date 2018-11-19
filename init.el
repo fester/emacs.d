@@ -174,12 +174,13 @@
   (expand-file-name artifact-name
 					(concat user-emacs-directory
 							(file-name-as-directory "projectiles"))))
-  
+
 (use-package projectile
   :diminish projectile-mode
   :custom
   (projectile-known-projects-file (projectile-artifact "bookmarks"))
   (projectile-cache-file (projectile-artifact "cache"))
+
   :init
   (projectile-mode))
 
@@ -188,6 +189,12 @@
       :diminish which-key-mode
       :config
       (which-key-mode))
+
+(use-package string-inflection
+  :bind
+  ("C-c s" . 'string-inflection-python-style-cycle))
+
+(use-package flycheck)
 
 ;; --------------------
 ;; C++
@@ -254,13 +261,26 @@
 	      ("<C-M-tab>" . clang-format-buffer)))
 
 ;; ---- Python
-
 (use-package elpy
-  :hook (python-mode . elpy-enable))
+  :init
+  (elpy-enable))
 
 (use-package pipenv
-  :hook (python-mode . pipenv-mode)
-  :init
-  (setq
-   pipenv-projectile-after-switch-function
-   #'pipenv-projectile-after-switch-extended))
+   :hook (python-mode . pipenv-mode))
+
+
+;; ---- Rust
+(use-package rust-mode)
+
+(use-package flycheck-rust
+  :after rust-mode)
+
+(use-package racer
+  :hook
+  (rust-mode . racer-mode)
+  (racer-mode . flycheck-rust-setup))
+  ;; :bind (:map rust-mode-map
+  ;; 			  ([tab] . company-indent-or-complete-common)))
+
+
+
