@@ -53,8 +53,9 @@
 (require 'package)
 
 (setq package-archives
-      '(("melpa" . "https://melpa.org/packages/")
-        ("org"   . "https://orgmode.org/elpa/")))
+      '(("melpa" . "https://stable.melpa.org/packages/")
+        ("org"   . "https://orgmode.org/elpa/")
+		("elpa" . "https://elpa.gnu.org/packages/")))
 
 (package-initialize)
 
@@ -177,12 +178,16 @@
 
 (use-package projectile
   :diminish projectile-mode
+
+  :config
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  
   :custom
   (projectile-known-projects-file (projectile-artifact "bookmarks"))
   (projectile-cache-file (projectile-artifact "cache"))
 
   :init
-  (projectile-mode))
+  (projectile-mode +1))
 
 
 (use-package which-key
@@ -266,8 +271,11 @@
   (elpy-enable))
 
 (use-package pipenv
-   :hook (python-mode . pipenv-mode))
-
+  :hook (python-mode . pipenv-mode)
+  :init
+  (setq
+   pipenv-projectile-after-switch-function
+   #'pipenv-projectile-after-switch-extended))
 
 ;; ---- Rust
 (use-package rust-mode)
@@ -283,4 +291,10 @@
   ;; 			  ([tab] . company-indent-or-complete-common)))
 
 
+;; ---- Clojure
+(use-package cider
+  :ensure t)
 
+(use-package rainbow-delimiters
+  :hook
+  (clojure-mode . rainbow-delimiters-mode))
