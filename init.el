@@ -298,3 +298,19 @@
 (use-package rainbow-delimiters
   :hook
   (clojure-mode . rainbow-delimiters-mode))
+
+(use-package dired
+  :ensure nil
+
+  :config
+  (put 'dired-find-alternate-file 'disabled nil)
+  (setq dired-auto-rever-buffer t
+		dired-listing-switches "-alhF"	
+		dired-recursive-copies 'always
+		dired-recursive-deletes 'top
+		dired-dwim-target t)
+ 
+  :bind (:map dired-mode-map 
+			  ("RET" . 'dired-find-alternate-file)
+			  ("^" . (lambda () (interactive) (find-alternate-file "..")))))
+
